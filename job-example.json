@@ -12,20 +12,46 @@
       "data": {
         "title": "&title",
         "rate": "&rate",
-        "tags": "&tags"
+        "tags": "&tags",
+        "question": "&question-text",
+        "answers": "&answers",
+        "acceptedAnswerId": "&acceptedAnswer"
       },
       "getters": {
         "title": {
           "$find": {"$selector": "#question-header a.question-hyperlink", "$get": "text"}
         },
         "rate": {
-          "$find": {"$selector": "#mainbar .vote .vote-count-post", "$get": "int"}
+          "$find": {"$selector": "#question .vote .vote-count-post", "$get": "int"}
         },
         "tags": {
           "$find": {
             "$selector": ".post-taglist a.post-tag",
             "$each": {"$get": "text"}
           }
+        },
+        "question-text": {
+          "$find": {"$selector": "#question .postcell .post-text", "$get": "text"}
+        },
+        "answers": {
+          "$find": {
+            "$selector": "#answers .answer",
+            "$each": {"$get": "&single-answer"}
+          }
+        },
+        "single-answer": {
+          "id": {
+            "$find": {"$get": {"$attribute": "data-answerid"}}
+          },
+          "rate": {
+            "$find": {"$selector": "> table .votecell .vote-count-post", "$get": "int"}
+          },
+          "answer": {
+            "$find": {"$selector": "> table .answercell .post-text", "$get": "text"}
+          }
+        },
+        "acceptedAnswer": {
+          "$find": {"$selector": "#answers .answer.accepted-answer", "$get": {"$attribute": "data-answerid"}}
         }
       }
     },
